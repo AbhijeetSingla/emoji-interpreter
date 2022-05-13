@@ -1,2 +1,2 @@
-# emoji-interpreter
- Provides a description of emoji's 
+# About
+ Provides a description of emoji's  through an internal database.
