@@ -250,8 +250,8 @@ button + button {
   color: var(--blog-card-text-color);
   padding-inline-start: 0;
   padding-inline-end : 0;
-  padding-block-start : 5rem;
-  padding-block-end : 5rem;
+  padding-block-start : 3.8rem;
+  padding-block-end : 3.8rem;
   text-align: center;
 }
 
