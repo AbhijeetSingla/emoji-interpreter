@@ -35,6 +35,12 @@ function App() {
     setEmoji(document.querySelector("#textinput").value);
   }
 
+  function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+
+  const convertedOutput =  emojiList[emoji] ? emojiList[emoji] : getKeyByValue(emojiList, emoji); 
+
   return (
     <div>
       <div className="container-center section-base center-text">
@@ -48,7 +54,7 @@ function App() {
         <div className='flex' id='generatebuttondiv'>
           <button className='primary-button' onClick={getEmojiName}>Get Translation</button>
         </div>
-        <div id='translationholder'>{emojiList[emoji]}</div>
+        <div id='translationholder'>{convertedOutput}</div>
       </div>
     </div>
   );
