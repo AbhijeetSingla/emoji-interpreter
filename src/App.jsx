@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './App.css';
 import emojiList from './emojiList';
 
@@ -27,11 +28,13 @@ function Footer() {
 }
 
 function App() {
-  function getInput() {
-    const input = document.querySelector("#textinput").value;
-    return input
+  
+  const [emoji, setEmoji] = useState(document.querySelector("#textinput"));
+
+  function getEmojiName() {
+    setEmoji(document.querySelector("#textinput").value);
   }
-  let input = getInput();
+
   return (
     <div>
       <div className="container-center section-base center-text">
@@ -40,22 +43,16 @@ function App() {
       </div>
       <div className='container-center section-offwhite'>
         <div>
-          <textarea name="Enter Emoji" id="textinput" cols='30' rows='10' placeholder='Please enter the emoji here, also, if you want to search for multiple emojis then separate with a ","'></textarea>
+          <textarea name="Enter Emoji" id="textinput" placeholder='Please enter the emoji here, also, if you want to search for multiple emojis then separate with a ","'></textarea>
         </div>
         <div className='flex' id='generatebuttondiv'>
-          <button className='primary-button' onClick={getInput}>Get Translation</button>
+          <button className='primary-button' onClick={getEmojiName}>Get Translation</button>
         </div>
-        <div id='translationholder'>{emojiList[input]}</div>
+        <div id='translationholder'>{emojiList[emoji]}</div>
       </div>
     </div>
   );
 }
-
-
-console.log(emojiList["9️⃣"]); //!testing porposes
-
-
-
 
 export {
   Header,
