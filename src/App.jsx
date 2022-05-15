@@ -29,17 +29,20 @@ function Footer() {
 
 function App() {
   
-  const [emoji, setEmoji] = useState(document.querySelector("#textinput"));
+  const [textInput, setTextInput] = useState(null);
+  const [textOutput, setTextOutput] = useState(null);
 
-  function getEmojiName() {
-    setEmoji(document.querySelector("#textinput").value);
+  function updateTextInput(event) {
+    setTextInput(event.target.value);
   }
-
-  function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
+  
+  function getInterpretation (object, str) {
+    setTextInput(str ? str.trim() : null);
+    const searchString = object[str] ? object[str] : Object.keys(object).find(key => object[key] === str);
+    setTextOutput(searchString ? searchString : "Sorry, couldn't find what you are looking for :(");
   }
-
-  const convertedOutput =  emojiList[emoji] ? emojiList[emoji] : getKeyByValue(emojiList, emoji); 
+  
+  const convertedOutputWithMsg = textOutput ? textOutput : "Output will be shown here";
 
   return (
     <div>
@@ -49,13 +52,13 @@ function App() {
       </div>
       <div className='container-center section-offwhite'>
         <div>
-          <textarea name="Enter Emoji" id="textinput" placeholder='Please enter the emoji here, also, if you want to search for multiple emojis then separate with a ","'></textarea>
+          <textarea name="Enter Emoji" onChange={updateTextInput} id="textinput" placeholder='Please enter the emoji here, also, if you want to search for emoji, then enter the description of that emoji'></textarea>
         </div>
         <div className='flex' id='generatebuttondiv'>
-          <button className='primary-button' onClick={getEmojiName}>Get Translation</button>
+          <button className='primary-button' onClick={() => {getInterpretation(emojiList, textInput)}}>Get Translation</button>
         </div>
-        <div id='translationholder'>{convertedOutput}</div>
-      </div>
+        <div id='translationholder'>{convertedOutputWithMsg}</div>
+      </div> 
     </div>
   );
 }
