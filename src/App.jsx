@@ -37,17 +37,20 @@ function App() {
   }
   
   function getInterpretation (object, str) {
-    setTextInput(str ? str.trim() : null);
-    const searchString = object[str] ? object[str] : Object.keys(object).find(key => object[key] === str);
+    const split = str.split(" ").filter((element) => element !== '').map((element) => element = element.trim());
+    console.log(split);
+    const string = new RegExp(split);  //!does not work
+    console.log(string);
+    const searchString = object[str] ? object[str] : Object.keys(object).find(key => object[key].match(string)); //*idhar hi foreach function
     setTextOutput(searchString ? searchString : "Sorry, couldn't find what you are looking for :(");
   }
-  
+
   const convertedOutputWithMsg = textOutput ? textOutput : "Output will be shown here";
 
   return (
     <div>
       <div className="container-center section-base center-text">
-        <p>It interprets an emoji through internal data base.</p>
+        <p>It interprets an emoji through internal data base which contains <strong>almost</strong> every emoji (•_•)</p>
         <small>Check it out!</small>
       </div>
       <div className='container-center section-offwhite'>
