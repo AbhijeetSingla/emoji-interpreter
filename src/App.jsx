@@ -28,24 +28,46 @@ function Footer() {
 }
 
 function App() {
+
+  // var tenorAPIKey = "BTHA1VBDVYHD";
+  // console.log(tenorAPIKey);
   
   const [textInput, setTextInput] = useState(null);
-  const [textOutput, setTextOutput] = useState(null);
+  const [convertedOutputWithMsg, setConvertedOutputWithMsg] = useState(" ");
+  const [buttonText, setButtonText] = useState("Get Translation");
 
   function updateTextInput(event) {
     setTextInput(event.target.value);
   }
-  
-  function getInterpretation (object, str) {
-    const split = str.split(" ").filter((element) => element !== '').map((element) => element = element.trim());
-    console.log(split);
-    const string = new RegExp(split);  //!does not work
-    console.log(string);
-    const searchString = object[str] ? object[str] : Object.keys(object).find(key => object[key].match(string)); //*idhar hi foreach function
-    setTextOutput(searchString ? searchString : "Sorry, couldn't find what you are looking for :(");
+
+  function bestMatchInObject (object, searchString) {
+    const searchStringArray = searchString.split(/[\s-]+/).filter((element) => element !== '').map((element) => element = element.trim().replace(":", ""));
+    const searchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){2,${searchStringArray.length}}`, "gi");
+    const fallbackSearchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1,${searchStringArray.length}}`, "gi");
+    console.log(searchStringRegExp);
+    console.log(fallbackSearchStringRegExp);
+    const keyArray = Object.keys(object);
+    const valueArray = Object.values(object);
+    const matchCount = keyArray.map(element => {
+      const wordsMatchedArray = object[element].match(searchStringRegExp) ? object[element].match(searchStringRegExp) : object[element].match(fallbackSearchStringRegExp) ;
+      return wordsMatchedArray ? wordsMatchedArray.length : 0;
+    });
+    const diffArray = matchCount.map((element, index) => element - valueArray[index]
+                                                                         .split(/[\s-]+/)
+                                                                         .filter((element) => element !== '')
+                                                                         .map((element) => element = element.trim().replace(":", "")).length);
+    
+    console.log(diffArray.indexOf(Math.max(...diffArray)));
+    return `${Math.max(...diffArray)}` ? keyArray[diffArray.indexOf(Math.max(...diffArray))] : "Sorry, couldn't find what you are looking for :(";
   }
 
-  const convertedOutputWithMsg = textOutput ? textOutput : "Output will be shown here";
+  async function getInterpretation (object, str) {
+    setButtonText(null);
+    setConvertedOutputWithMsg("*crickets chirping...");
+    const interpretation = object[str.trim()]? object[str.trim()] : await Promise.resolve(bestMatchInObject(object, str));
+    setButtonText("Get Translation");
+    setConvertedOutputWithMsg(interpretation);
+  }
 
   return (
     <div>
@@ -58,7 +80,7 @@ function App() {
           <textarea name="Enter Emoji" onChange={updateTextInput} id="textinput" placeholder='Please enter the emoji here, also, if you want to search for emoji, then enter the description of that emoji'></textarea>
         </div>
         <div className='flex' id='generatebuttondiv'>
-          <button className='primary-button' onClick={() => {getInterpretation(emojiList, textInput)}}>Get Translation</button>
+          <button className='primary-button' id='buttonID' onClick={() => {getInterpretation(emojiList, textInput)}}>{buttonText}</button>
         </div>
         <div id='translationholder'>{convertedOutputWithMsg}</div>
       </div> 
