@@ -263,11 +263,22 @@ button + button {
 
 #translationholder {
   border: 2px solid var(--secondary-base);
-  background-color: var(--bg-color);
   height: 160px;
   margin-inline-start: auto;
   margin-inline-end: auto;
   font-family: monospace;
   display: grid;
   place-content: center;
+  transition: 500ms;
+}
+
+#buttonID:empty {
+  /* background-color: var(--bg-color); */
+  background-image: url("./components/ui/loading-animation.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: 1000ms;
+  height: 50px;
+  width: 155px;
 }
