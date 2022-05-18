@@ -28,9 +28,6 @@ function Footer() {
 }
 
 function App() {
-
-  // var tenorAPIKey = "BTHA1VBDVYHD";
-  // console.log(tenorAPIKey);
   
   const [textInput, setTextInput] = useState(null);
   const [convertedOutputWithMsg, setConvertedOutputWithMsg] = useState(" ");
@@ -42,22 +39,20 @@ function App() {
 
   function bestMatchInObject (object, searchString) {
     const searchStringArray = searchString.split(/[\s-]+/).filter((element) => element !== '').map((element) => element = element.trim().replace(":", ""));
-    const searchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){2,${searchStringArray.length}}`, "gi");
+    const searchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1}.+((${searchStringArray.join(")|(")})){1}`, "gi");
     const fallbackSearchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1,${searchStringArray.length}}`, "gi");
-    console.log(searchStringRegExp);
-    console.log(fallbackSearchStringRegExp);
     const keyArray = Object.keys(object);
     const valueArray = Object.values(object);
     const matchCount = keyArray.map(element => {
-      const wordsMatchedArray = object[element].match(searchStringRegExp) ? object[element].match(searchStringRegExp) : object[element].match(fallbackSearchStringRegExp) ;
-      return wordsMatchedArray ? wordsMatchedArray.length : 0;
+      const wordsMatchedArray = object[element].match(searchStringRegExp) ? object[element].match(searchStringRegExp) : object[element].match(fallbackSearchStringRegExp);
+      const wordsMatchedArrayLength = wordsMatchedArray ? wordsMatchedArray.toString().trim().replace(":", "").split(",").map(element => element.trim()).length : 0 ; //* maybe not anymore //!something's wrong I can feel it
+      return wordsMatchedArrayLength;
     });
     const diffArray = matchCount.map((element, index) => element - valueArray[index]
                                                                          .split(/[\s-]+/)
                                                                          .filter((element) => element !== '')
-                                                                         .map((element) => element = element.trim().replace(":", "")).length);
-    
-    console.log(diffArray.indexOf(Math.max(...diffArray)));
+                                                                         .map((element) => element = element.trim().replace(":", "")).length
+                                    );
     return `${Math.max(...diffArray)}` ? keyArray[diffArray.indexOf(Math.max(...diffArray))] : "Sorry, couldn't find what you are looking for :(";
   }
 
