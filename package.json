@@ -1,6 +1,8 @@
 {
   "name": "emoji-interpreter",
   "version": "0.1.0",
+  "description": "An emoji interpreter, which provides either the emoji related to the text provided or text according to the emoji entered.",
+  "author": "Abhijeet Singla",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
