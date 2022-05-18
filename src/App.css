@@ -273,7 +273,6 @@ button + button {
 }
 
 #buttonID:empty {
-  /* background-color: var(--bg-color); */
   background-image: url("./components/ui/loading-animation.svg");
   background-repeat: no-repeat;
   background-position: center;
