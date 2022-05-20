@@ -40,22 +40,37 @@ function App() {
   function bestMatchInObject (object, searchString) {
     const searchStringArray = searchString.split(/[\s-]+/).filter((element) => element !== '').map((element) => element = element.trim().replace(":", ""));
     const searchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1}.+((${searchStringArray.join(")|(")})){1}`, "gi");
-    const fallbackSearchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1,${searchStringArray.length}}`, "gi");
+    const fallbackSearchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1,${searchStringArray.length + 1}}`, "gi");
     const keyArray = Object.keys(object);
     const valueArray = Object.values(object);
-    const matchCount = keyArray.map(element => {
-      const wordsMatchedArray = object[element].match(searchStringRegExp) ? object[element].match(searchStringRegExp) : object[element].match(fallbackSearchStringRegExp);
-      const wordsMatchedArrayLength = wordsMatchedArray ? wordsMatchedArray.toString().trim().replace(":", "").split(",").map(element => element.trim()).length : 0 ; //* maybe not anymore //!something's wrong I can feel it
-      return wordsMatchedArrayLength;
-    });
-    const diffArray = matchCount.map((element, index) => element - valueArray[index]
+    
+    if (searchStringArray.length > 1) {
+      const matchCount = keyArray.map(element => {
+        const wordsMatchedArray = object[element].match(searchStringRegExp);
+        const wordsMatchedArrayLength = wordsMatchedArray ? wordsMatchedArray.toString().trim().replace(":", "").split(",").map(element => element.trim()).length : 0;
+        return wordsMatchedArrayLength;
+      });
+      const diffArray = matchCount.map((element, index) => element - valueArray[index]
                                                                          .split(/[\s-]+/)
                                                                          .filter((element) => element !== '')
                                                                          .map((element) => element = element.trim().replace(":", "")).length
                                     );
-    return `${Math.max(...diffArray)}` ? keyArray[diffArray.indexOf(Math.max(...diffArray))] : "Sorry, couldn't find what you are looking for :(";
+      return `${Math.max(...diffArray)}` ? keyArray[diffArray.indexOf(Math.max(...diffArray))] : "Sorry, couldn't find what you are looking for :(";
+    } else {
+      const matchCount = keyArray.map(element => {
+        const wordsMatchedArray = object[element].match(fallbackSearchStringRegExp);
+        const wordsMatchedArrayLength = wordsMatchedArray ? wordsMatchedArray.toString().trim().replace(":", "").split(",").map(element => element.trim()).length : 0 ;
+        return wordsMatchedArrayLength;
+      });
+      const diffArray = matchCount.map((element, index) => element - valueArray[index]
+                                                                      .split(/[\s-]+/)
+                                                                      .filter((element) => element !== '')
+                                                                      .map((element) => element = element.trim().replace(":", "")).length
+                                );
+      return `${Math.max(...diffArray)}` ? keyArray[diffArray.indexOf(Math.max(...diffArray))] : "Sorry, couldn't find what you are looking for :(";
+    }
   }
-
+  
   async function getInterpretation (object, str) {
     setButtonText(null);
     setConvertedOutputWithMsg("*crickets chirping...");
