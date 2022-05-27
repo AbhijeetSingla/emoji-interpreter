@@ -37,6 +37,20 @@ function App() {
     setTextInput(event.target.value);
   }
 
+  function timeout(ms) {
+    return new Promise(res => setTimeout(res, ms));
+  }
+
+  async function test() {
+    console.log("test");
+    await timeout(1000);
+    console.log("testafter1s")
+    await timeout(2000);
+    console.log("testafter2s")
+  }
+
+  test();
+
   function bestMatchInObject (object, searchString) {
     const searchStringArray = searchString.split(/[\s-]+/).filter((element) => element !== '').map((element) => element = element.trim().replace(":", ""));
     const searchStringRegExp = new RegExp(`\\s?((${searchStringArray.join(")|(")})){1}.+((${searchStringArray.join(")|(")})){1}`, "gi");
