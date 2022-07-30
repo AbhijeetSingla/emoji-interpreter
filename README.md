@@ -18,7 +18,3 @@ Any suggestions are welcome, be it a different way to write the same thing, kind
 
 # Stay tuned 👀
 More to come.
-
-
-
-
